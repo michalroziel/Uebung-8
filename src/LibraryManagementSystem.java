@@ -1,6 +1,8 @@
 package src;
 
 import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class LibraryManagementSystem {
 
@@ -66,4 +68,33 @@ public class LibraryManagementSystem {
     public int calculateTotalNumberOfPages(){
        return bibliotheque.values().stream().mapToInt(Book::getPages).sum();
     }
+    public List<Book> filterByGenre(String genre){
+        List<Book> filteredBib = new ArrayList<>();
+        bibliotheque.values().stream().filter(book -> book.getGenre().equals(genre)).forEach(filteredBib::add);
+        return filteredBib;
+    }
+    public TreeMap<String,Double> calculateAverageRatingByGenre(){
+        TreeMap<String,Double> averageRatingByGenre = new TreeMap<>();
+        List<String> genres = bibliotheque.values().stream().map(Book::getGenre).toList();
+        for (String genre : genres){
+            List<Book> books = filterByGenre(genre);
+            double averageRating = books.stream().collect(Collectors.averagingDouble(Book::getRating));
+            averageRatingByGenre.put(genre,averageRating);
+        }
+        return averageRatingByGenre;
+    }
+    public List<Book> topThreeRatedBooks(){
+        return sortByRates().subList(0,3);
+    }
+    public List<Book> sortByRates(){
+        return bibliotheque.values().stream().sorted((book1, book2)-> Double.compare(book2.getRating(),book1.getRating())).toList();
+    }
+    public List<String> authorsWithMostBooks(){
+        //TODO ???
+        return null;
+    }
+    public List<Book> filterAndSort(Comparator<Book> sorting, Predicate<Book> filtering){
+        return bibliotheque.values().stream().filter(filtering).sorted(sorting).toList();
+    }
+
 }
