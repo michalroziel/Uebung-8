@@ -6,14 +6,15 @@ import java.util.stream.Collectors;
 
 public class LibraryManagementSystem {
 
-    TreeMap<String, Book> bibliotheque;
-    HashMap<String, User> users;
-    TreeMap<String, Book> borrowedBooks;
+    private TreeMap<String, Book> bibliotheque;
+    private HashMap<String, User> users;
+    private TreeSet<Book> borrowedBooks;
+    private Comparator<Book> comparator = Comparator.comparing(Book::getReturnDate);
 
     public LibraryManagementSystem() {
         bibliotheque = new TreeMap<>();
         users = new HashMap<>();
-        borrowedBooks = new TreeMap<>();
+        borrowedBooks = new TreeSet<>(comparator);
     }
 
     // Add a new Book to the library. If already exists, return false else add it and return true.
@@ -58,7 +59,7 @@ public class LibraryManagementSystem {
         Book book = bibliotheque.get(bookTitle);
         User user = users.get(readerID);
         if(user.borrow(book)){
-            borrowedBooks.put(bookTitle, book);
+            borrowedBooks.add(book);
             return true;
         }
         return false;
@@ -73,7 +74,7 @@ public class LibraryManagementSystem {
     }
     //Printing all books in the library sorted by the return date.
     public void printAllBorrowedBooks() {
-        borrowedBooks.values().stream().sorted((book1,book2)-> book1.getReturnDate().compareTo(book2.getReturnDate())).forEach(System.out::println);
+        borrowedBooks.forEach(System.out::println);
     }
     // Filters the books by release Year and returns them as a List.
     public List<Book> filterBooksByRelease(int releaseYear){
@@ -119,4 +120,7 @@ public class LibraryManagementSystem {
         return bibliotheque.values().stream().filter(filtering).sorted(sorting).toList();
     }
 
+    public void printAllBooks() {
+        bibliotheque.values().forEach(System.out::println);
+    }
 }

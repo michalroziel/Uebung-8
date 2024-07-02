@@ -8,7 +8,7 @@ public class User {
     private String name;
     private String readerID;
     private TreeSet<Book> borrowedBooks;
-    private Comparator<Book> comparator = (Book book1, Book book2) -> book1.getReturnDate().compareTo(book2.getReturnDate());
+    private Comparator<Book> comparator = Comparator.comparing(Book::getReturnDate);
 
     public User(String name, String readerID) {
         this.name = name;

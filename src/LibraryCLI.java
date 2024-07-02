@@ -40,7 +40,8 @@ public class LibraryCLI {
             System.out.println("13. Autoren mit den meisten Büchern anzeigen");
             System.out.println("14. Bücher nach Bewertung sortieren");
             System.out.println("15. Gefilterte und sortierte Liste der Bücher anzeigen");
-            System.out.println("16. Programm beenden");
+            System.out.println("16. Nutzer anlegen");
+            System.out.println("17. Programm beenden");
             System.out.print("Bitte wählen Sie eine Option: ");
 
             int choice = scanner.nextInt();
@@ -93,6 +94,9 @@ public class LibraryCLI {
                     filterAndSortBooks();
                     break;
                 case 16:
+                    addUser();
+                    break;
+                case 17:
                     running = false;
                     break;
                 default:
@@ -156,9 +160,16 @@ public class LibraryCLI {
             System.out.println("Buch konnte nicht hinzugefügt werden.");
         }
     }
+    private void addUser(){
+        System.out.println("Bitte geben Sie die Benutzer-ID ein: ");
+        String userID = scanner.nextLine();
+        System.out.println("Bitte geben Sie den Namen des Benutzers ein: ");
+        String name = scanner.nextLine();
+        libraryManagementSystem.addUser(new User(userID,name));
+    }
 
     private void displayAllBooks() {
-        //TODO Implement this method
+        libraryManagementSystem.printAllBooks();
     }
 
     private void filterBooksByYear() {

@@ -97,5 +97,19 @@ public class Book {
         this.returnDate = returnDate;
     }
 
+    @Override
+    public String toString() {
+        return "Book{" +
+                "title='" + title + '\'' +
+                ", author='" + author + '\'' +
+                ", year=" + year +
+                ", pages=" + pages +
+                ", genre='" + genre + '\'' +
+                ", rating=" + rating +
+                ", borrowed=" + borrowed +
+                ", returnDate=" + returnDate +
+                '}';
+    }
+
 
 }
