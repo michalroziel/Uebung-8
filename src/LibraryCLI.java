@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Scanner;
 import java.util.function.Predicate;
 
@@ -16,7 +17,7 @@ public class LibraryCLI {
         this.scanner = new Scanner(System.in);
     }
 
-    public void run() {
+    public void run() throws InvalidRatingException {
         loadBooksFromCSV("books.csv");
 
         boolean running = true;
@@ -100,6 +101,7 @@ public class LibraryCLI {
     }
 
     private void loadBooksFromCSV(String filePath) {
+        //TODO Implemneting this Methode
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             br.readLine();
             System.out.println("Bücher aus CSV-Datei geladen.");
@@ -108,7 +110,7 @@ public class LibraryCLI {
         }
     }
 
-    private void addBook() {
+    private void addBook() throws InvalidRatingException {
         System.out.print("Titel: ");
         String title = scanner.nextLine();
         System.out.print("Autor: ");
@@ -123,12 +125,15 @@ public class LibraryCLI {
         double rating = scanner.nextDouble();
         scanner.nextLine(); // Consume newline
 
-        . . .
-        System.out.println("Buch hinzugefügt!");
+        if (libraryManagementSystem.addBook(new Book(title, author, year, pages, genre, rating))) {
+            System.out.println("Buch hinzugefügt!");
+        } else {
+            System.out.println("Buch konnte nicht hinzugefügt werden.");
+        }
     }
 
     private void displayAllBooks() {
-        libraryManagementSystem.toString();
+        //TODO Implement this method
     }
 
     private void filterBooksByYear() {
@@ -173,6 +178,7 @@ public class LibraryCLI {
     private void displayBorrowedBooksByUser() {
         System.out.print("Benutzer-ID: ");
         libraryManagementSystem.allBooksBorrowedByUser(scanner.nextLine());
+
     }
 
     private void displayAllBorrowedBooks() {
@@ -216,13 +222,22 @@ public class LibraryCLI {
         Predicate<Book> filter;
         switch (filterChoice) {
             case 1:
-                filter = ...
+                if (comparison == 1)
+                    filter = book -> book.getYear() > filterValue;
+                else
+                    filter = book -> book.getYear() < filterValue;
                 break;
             case 2:
-                filter = ...
+                if (comparison == 1)
+                    filter = book -> book.getPages() > filterValue;
+                else
+                    filter = book -> book.getPages() < filterValue;
                 break;
             case 3:
-                filter = ...
+                if (comparison == 1)
+                    filter = book -> book.getRating() > filterValue;
+                else
+                    filter = book -> book.getRating() < filterValue;
                 break;
             default:
                 System.out.println("Ungültige Auswahl.");
@@ -241,27 +256,28 @@ public class LibraryCLI {
         Comparator<Book> sorter;
         switch (sortChoice) {
             case 1:
-                sorter = ...
+                sorter = Comparator.comparing(Book::getTitle);
                 break;
             case 2:
-                sorter = ...
+                sorter = Comparator.comparing(Book::getYear);
                 break;
             case 3:
-                sorter = ...
+                sorter = Comparator.comparing(Book::getPages);
                 break;
             case 4:
-                sorter = ...
+                sorter = Comparator.comparing(Book::getRating);
+
                 break;
             default:
                 System.out.println("Ungültige Auswahl.");
                 return;
         }
 
-        List<Book> result = libraryManagementSystem.filterAndSortBooks(filter, sorter);
+        List<Book> result = libraryManagementSystem.filterAndSort(sorter, filter);
         result.forEach(System.out::println);
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InvalidRatingException {
         LibraryManagementSystem libraryManagementSystem = new LibraryManagementSystem();
         LibraryCLI libraryCLI = new LibraryCLI(libraryManagementSystem);
         libraryCLI.run();

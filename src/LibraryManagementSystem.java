@@ -17,7 +17,7 @@ public class LibraryManagementSystem {
     }
 
     // Add a new Book to the library. If already exists, return false else add it and return true.
-    public boolean addBock(Book book){
+    public boolean addBook(Book book){
         if (bibliotheque.containsKey(book.getTitle())){
             return false;
         }
@@ -112,7 +112,7 @@ public class LibraryManagementSystem {
         return bibliotheque.values().stream().sorted((book1, book2)-> Double.compare(book2.getRating(),book1.getRating())).toList();
     }
     public TreeMap<String, Integer> authorsWithMostBooks(){
-        //TODO ???
+
         return null;
     }
     public List<Book> filterAndSort(Comparator<Book> sorting, Predicate<Book> filtering){
