@@ -21,7 +21,15 @@ public class LibraryCLI {
     public void run() throws InvalidRatingException {
         loadBooksFromCSV("books.csv");
         libraryManagementSystem.addUser(new User("1", "Valentin"));
+        libraryManagementSystem.addUser(new User("soso", "Sophia"));
         libraryManagementSystem.borrowBook("1", "1984");
+        libraryManagementSystem.addBook(new Book("Hentai-Manga", "Esch", 2024, 69, "Hentai", 5.0));
+        libraryManagementSystem.addBook(new Book("Hentai-Manga-Teil 2", "Esch", 2024, 69, "Hentai", 4.0));
+        libraryManagementSystem.addBook(new Book("Internetverlauf", "Esch", 2024, 69, "Erotik", 4.0));
+        libraryManagementSystem.borrowBook("soso", "Hentai-Manga");
+        libraryManagementSystem.borrowBook("soso", "Hentai-Manga-Teil 2");
+        libraryManagementSystem.borrowBook("soso", "Internetverlauf");
+
         boolean running = true;
 
         while (running) {
@@ -110,7 +118,6 @@ public class LibraryCLI {
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
             boolean isFirstLine = true;
-
             while ((line = br.readLine()) != null) {
                 if (isFirstLine) {
                     // Skip the header line

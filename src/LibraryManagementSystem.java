@@ -9,7 +9,7 @@ public class LibraryManagementSystem {
     private TreeMap<String, Book> bibliotheque;
     private HashMap<String, User> users;
     private TreeSet<Book> borrowedBooks;
-    private Comparator<Book> comparator = Comparator.comparing(Book::getReturnDate);
+    private Comparator<Book> comparator = Comparator.comparing(Book::getReturnDate).thenComparing(Book::getTitle);
 
     public LibraryManagementSystem() {
         bibliotheque = new TreeMap<>();
@@ -88,7 +88,7 @@ public class LibraryManagementSystem {
     //Sorts the books by the number of pages and returns them as a List.
     public List<Book> sortBooksByNumberOfPages() {
         List<Book> sortedBib = new ArrayList<>();
-        bibliotheque.values().stream().sorted((book1,book2)-> Integer.compare(book1.getPages(),book2.getPages())).forEach(sortedBib::add);
+        bibliotheque.values().stream().sorted(Comparator.comparingInt(Book::getPages)).forEach(sortedBib::add);
         return sortedBib;
     }
     public int calculateTotalNumberOfPages(){
@@ -115,10 +115,25 @@ public class LibraryManagementSystem {
     public List<Book> sortByRates(){
         return bibliotheque.values().stream().sorted((book1, book2)-> Double.compare(book2.getRating(),book1.getRating())).toList();
     }
-    public TreeMap<String, Integer> authorsWithMostBooks(){
-
-        return null;
+    public List<Book> filterByAuthor(String author){
+        List<Book> filteredBib = new ArrayList<>();
+        bibliotheque.values().stream().filter(book -> book.getAuthor().equals(author)).forEach(filteredBib::add);
+        return filteredBib;
     }
+    public LinkedHashMap<String, Integer> authorsWithMostBooks(){
+        LinkedHashMap<String,Integer> countBooksByAuthor = new LinkedHashMap<>();
+        List<String> authors = bibliotheque.values().stream().map(Book::getAuthor).toList();
+        for (String author : authors){
+            List<Book> books = filterByAuthor(author);
+            countBooksByAuthor.put(author,books.size());
+        }
+
+        return countBooksByAuthor.entrySet()
+                .stream()
+                .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+    }
+
     public List<Book> filterAndSort(Comparator<Book> sorting, Predicate<Book> filtering){
         return bibliotheque.values().stream().filter(filtering).sorted(sorting).toList();
     }
