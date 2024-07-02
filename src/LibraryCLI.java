@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.function.Predicate;
 
+
 public class LibraryCLI {
     private LibraryManagementSystem libraryManagementSystem;
     private Scanner scanner;
@@ -101,14 +102,38 @@ public class LibraryCLI {
     }
 
     private void loadBooksFromCSV(String filePath) {
-        //TODO Implemneting this Methode
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-            br.readLine();
-            System.out.println("Bücher aus CSV-Datei geladen.");
+            String line;
+            boolean isFirstLine = true;
+
+            while ((line = br.readLine()) != null) {
+                if (isFirstLine) {
+                    // Skip the header line
+                    isFirstLine = false;
+                    continue;
+                }
+
+                String[] values = line.split(",");
+                String title = values[0];
+                String author = values[1];
+                int year = Integer.parseInt(values[2]);
+                int pages = Integer.parseInt(values[3]);
+                String genre = values[4];
+                double rating = Double.parseDouble(values[5]);
+
+                Book parsedBook = new Book(title, author, year, pages, genre, rating);
+                this.libraryManagementSystem.addBook(parsedBook);
+            }
+
+            System.out.println("Books loaded from CSV file.");
+
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (InvalidRatingException e) {
+            throw new RuntimeException(e);
         }
     }
+
 
     private void addBook() throws InvalidRatingException {
         System.out.print("Titel: ");
