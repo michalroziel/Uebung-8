@@ -34,8 +34,9 @@ public class User {
     }
 
 
-
-
+    public TreeSet<Book> getBorrowedBooks() {
+        return borrowedBooks;
+    }
 
     public String getName() {
         return name;

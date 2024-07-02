@@ -1,17 +1,16 @@
 package src;
 
-import java.util.LinkedHashMap;
-import java.util.TreeMap;
+import java.util.*;
 
 public class LibraryManagementSystem {
 
     TreeMap<String, Book> bibliotheque;
-    LinkedHashMap<String, User> users;
+    HashMap<String, User> users;
     TreeMap<String, Book> borrowedBooks;
 
     public LibraryManagementSystem() {
         bibliotheque = new TreeMap<>();
-        users = new LinkedHashMap<>();
+        users = new HashMap<>();
         borrowedBooks = new TreeMap<>();
     }
 
@@ -40,5 +39,31 @@ public class LibraryManagementSystem {
         }
         return false;
     }
-
+    // Prints all borrowed Books by a specific user.
+    public void allBooksBorrowedByUser(String readerID){
+        if(!users.containsKey(readerID)){
+            System.out.println("User does not exist");
+        }
+        User user = users.get(readerID);
+        user.getBorrowedBooks().forEach(System.out::println);
+    }
+    //Printing all books in the library sorted by the return date.
+    public void printAllBorrowedBooks() {
+        borrowedBooks.values().stream().sorted((book1,book2)-> book1.getReturnDate().compareTo(book2.getReturnDate())).forEach(System.out::println);
+    }
+    // Filters the books by release Year and returns them as a List.
+    public List<Book> filterBooksByRelease(int releaseYear){
+        List<Book> filteredBib = new ArrayList<>();
+        bibliotheque.values().stream().filter(book -> book.getYear() == releaseYear).forEach(filteredBib::add);
+        return filteredBib;
+    }
+    //Sorts the books by the number of pages and returns them as a List.
+    public List<Book> sortBooksByNumberOfPages() {
+        List<Book> sortedBib = new ArrayList<>();
+        bibliotheque.values().stream().sorted((book1,book2)-> Integer.compare(book1.getPages(),book2.getPages())).forEach(sortedBib::add);
+        return sortedBib;
+    }
+    public int calculateTotalNumberOfPages(){
+       return bibliotheque.values().stream().mapToInt(Book::getPages).sum();
+    }
 }
