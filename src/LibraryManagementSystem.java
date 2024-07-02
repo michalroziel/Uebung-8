@@ -24,6 +24,28 @@ public class LibraryManagementSystem {
         bibliotheque.put(book.getTitle(), book);
         return true;
     }
+    public boolean addUser(User user){
+        if (users.containsKey(user.getReaderID())){
+            return false;
+        }
+        users.put(user.getReaderID(), user);
+        return true;
+    }
+    public boolean returnBook(String readerID, String bookTitle){
+        if(!bibliotheque.containsKey(bookTitle)){
+            return false;
+        }
+        if(!users.containsKey(readerID)){
+            return false;
+        }
+        Book book = bibliotheque.get(bookTitle);
+        User user = users.get(readerID);
+        if(user.returnBook(book)){
+            borrowedBooks.remove(bookTitle);
+            return true;
+        }
+        return false;
+    }
 
     // Borrow a Book from the library. If the book does not exist or the user does not exist, return false. Else, borrow the book and return true.
     public boolean borrowBook(String readerID, String bookTitle){
@@ -89,7 +111,7 @@ public class LibraryManagementSystem {
     public List<Book> sortByRates(){
         return bibliotheque.values().stream().sorted((book1, book2)-> Double.compare(book2.getRating(),book1.getRating())).toList();
     }
-    public List<String> authorsWithMostBooks(){
+    public TreeMap<String, Integer> authorsWithMostBooks(){
         //TODO ???
         return null;
     }

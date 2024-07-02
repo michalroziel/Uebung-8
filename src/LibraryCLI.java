@@ -101,7 +101,7 @@ public class LibraryCLI {
 
     private void loadBooksFromCSV(String filePath) {
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-            . . .
+            br.readLine();
             System.out.println("Bücher aus CSV-Datei geladen.");
         } catch (IOException e) {
             e.printStackTrace();
@@ -128,42 +128,76 @@ public class LibraryCLI {
     }
 
     private void displayAllBooks() {
+        libraryManagementSystem.toString();
     }
 
     private void filterBooksByYear() {
+        System.out.print("Geben Sie das Jahr ein: ");
+        libraryManagementSystem.filterBooksByRelease(scanner.nextInt()).forEach(System.out::println);
     }
 
     private void sortBooksByPages() {
+        libraryManagementSystem.sortBooksByNumberOfPages().forEach(System.out::println);
     }
 
     private void calculateTotalPages() {
+        System.out.println("Gesamtanzahl der Seiten: " + libraryManagementSystem.calculateTotalNumberOfPages());
     }
 
     private void borrowBook() {
+        System.out.print("Benutzer-ID: ");
+        String readerID = scanner.nextLine();
+        System.out.print("Buchtitel: ");
+        String bookTitle = scanner.nextLine();
+
+        if (libraryManagementSystem.borrowBook(readerID, bookTitle)) {
+            System.out.println("Buch ausgeliehen!");
+        } else {
+            System.out.println("Buch konnte nicht ausgeliehen werden.");
+        }
     }
 
     private void returnBook() {
+        System.out.print("Benutzer-ID: ");
+        String readerID = scanner.nextLine();
+        System.out.print("Buchtitel: ");
+        String bookTitle = scanner.nextLine();
+
+        if (libraryManagementSystem.returnBook(readerID, bookTitle)) {
+            System.out.println("Buch zurückgegeben!");
+        } else {
+            System.out.println("Buch konnte nicht zurückgegeben werden.");
+        }
     }
 
     private void displayBorrowedBooksByUser() {
+        System.out.print("Benutzer-ID: ");
+        libraryManagementSystem.allBooksBorrowedByUser(scanner.nextLine());
     }
 
     private void displayAllBorrowedBooks() {
+        libraryManagementSystem.printAllBorrowedBooks();
     }
 
     private void filterBooksByGenre() {
+        System.out.print("Genre: ");
+        libraryManagementSystem.filterByGenre(scanner.nextLine()).forEach(System.out::println);
     }
 
     private void calculateAverageRatingPerGenre() {
+        libraryManagementSystem.calculateAverageRatingByGenre().forEach((genre, rating) -> System.out.println(genre + ": " + rating));
     }
 
     private void displayTopRatedBooks() {
+        libraryManagementSystem.topThreeRatedBooks().forEach(System.out::println);
     }
 
     private void displayAuthorsWithMostBooks() {
+        libraryManagementSystem.authorsWithMostBooks().forEach((author, count) -> System.out.println(author + ": " + count));
     }
 
     private void sortBooksByRating() {
+        libraryManagementSystem.sortByRates().forEach(System.out::println);
     }
 
     private void filterAndSortBooks() {
