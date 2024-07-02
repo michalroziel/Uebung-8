@@ -10,7 +10,7 @@ public class User {
     private TreeSet<Book> borrowedBooks;
     private Comparator<Book> comparator = Comparator.comparing(Book::getReturnDate);
 
-    public User(String name, String readerID) {
+    public User(String readerID, String name) {
         this.name = name;
         this.readerID = readerID;
         this.borrowedBooks = new TreeSet<>(comparator);
@@ -19,6 +19,7 @@ public class User {
         if (book.isBorrowed()) {
             return false;
         }
+        book.setReturnDate(LocalDate.now().plusDays(14));
         book.setBorrowed(true);
         borrowedBooks.add(book);
         return true;

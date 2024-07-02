@@ -16,7 +16,9 @@ public class LibraryManagementSystem {
         users = new HashMap<>();
         borrowedBooks = new TreeSet<>(comparator);
     }
-
+    public User getUser(String ID){
+        return users.get(ID);
+    }
     // Add a new Book to the library. If already exists, return false else add it and return true.
     public boolean addBook(Book book){
         if (bibliotheque.containsKey(book.getTitle())){
@@ -42,7 +44,8 @@ public class LibraryManagementSystem {
         Book book = bibliotheque.get(bookTitle);
         User user = users.get(readerID);
         if(user.returnBook(book)){
-            borrowedBooks.remove(bookTitle);
+            borrowedBooks.remove(book);
+            book.setReturnDate(null);
             return true;
         }
         return false;

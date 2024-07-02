@@ -20,7 +20,8 @@ public class LibraryCLI {
 
     public void run() throws InvalidRatingException {
         loadBooksFromCSV("books.csv");
-
+        libraryManagementSystem.addUser(new User("1", "Valentin"));
+        libraryManagementSystem.borrowBook("1", "1984");
         boolean running = true;
 
         while (running) {
@@ -165,7 +166,16 @@ public class LibraryCLI {
         String userID = scanner.nextLine();
         System.out.println("Bitte geben Sie den Namen des Benutzers ein: ");
         String name = scanner.nextLine();
-        libraryManagementSystem.addUser(new User(userID,name));
+        if (libraryManagementSystem.getUser(userID) != null){
+            System.out.println("Benutzer existiert bereits.");
+            return;
+        }
+        if (libraryManagementSystem.addUser(new User(userID,name))){
+            System.out.println("Benutzer hinzugefügt!");
+        }else {
+            System.out.println("Benutzer konnte nicht hinzugefügt werden.");
+        }
+
     }
 
     private void displayAllBooks() {
