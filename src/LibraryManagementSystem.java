@@ -120,18 +120,39 @@ public class LibraryManagementSystem {
         bibliotheque.values().stream().filter(book -> book.getAuthor().equals(author)).forEach(filteredBib::add);
         return filteredBib;
     }
-    public LinkedHashMap<String, Integer> authorsWithMostBooks(){
-        LinkedHashMap<String,Integer> countBooksByAuthor = new LinkedHashMap<>();
-        List<String> authors = bibliotheque.values().stream().map(Book::getAuthor).toList();
-        for (String author : authors){
-            List<Book> books = filterByAuthor(author);
-            countBooksByAuthor.put(author,books.size());
+    public class AuthorBookCount implements Comparable<AuthorBookCount> {
+        String author;
+        Integer bookCount;
+
+        public AuthorBookCount(String author, Integer bookCount) {
+            this.author = author;
+            this.bookCount = bookCount;
         }
 
-        return countBooksByAuthor.entrySet()
-                .stream()
-                .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+        @Override
+        public int compareTo(AuthorBookCount o) {
+            // For descending order
+            return o.bookCount.compareTo(this.bookCount);
+        }
+
+        @Override
+        public String toString() {
+            return author + ": " + bookCount;
+        }
+    }
+    public HashMap<String, Integer> authorsWithMostBooks() {
+        Set<AuthorBookCount> sortedAuthors = new TreeSet<>();
+        List<String> authors = bibliotheque.values().stream().map(Book::getAuthor).toList();
+        for (String author : authors) {
+            List<Book> books = filterByAuthor(author);
+            sortedAuthors.add(new AuthorBookCount(author, books.size()));
+        }
+
+        HashMap<String, Integer> sortedAuthorsMap = new HashMap<>();
+        for (AuthorBookCount authorBookCount : sortedAuthors) {
+            sortedAuthorsMap.put(authorBookCount.author, authorBookCount.bookCount);
+        }
+        return sortedAuthorsMap;
     }
 
     public List<Book> filterAndSort(Comparator<Book> sorting, Predicate<Book> filtering){
