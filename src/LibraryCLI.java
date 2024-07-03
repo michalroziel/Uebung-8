@@ -253,6 +253,7 @@ public class LibraryCLI {
 
     private void displayAuthorsWithMostBooks() {
         libraryManagementSystem.authorsWithMostBooks().forEach((author, count) -> System.out.println(author + ": " + count));
+    }
 
     private void sortBooksByRating() {
         libraryManagementSystem.sortByRates().forEach(System.out::println);

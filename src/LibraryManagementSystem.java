@@ -120,39 +120,15 @@ public class LibraryManagementSystem {
         bibliotheque.values().stream().filter(book -> book.getAuthor().equals(author)).forEach(filteredBib::add);
         return filteredBib;
     }
-    public class AuthorBookCount implements Comparable<AuthorBookCount> {
-        String author;
-        Integer bookCount;
-
-        public AuthorBookCount(String author, Integer bookCount) {
-            this.author = author;
-            this.bookCount = bookCount;
-        }
-
-        @Override
-        public int compareTo(AuthorBookCount o) {
-            // For descending order
-            return o.bookCount.compareTo(this.bookCount);
-        }
-
-        @Override
-        public String toString() {
-            return author + ": " + bookCount;
-        }
-    }
-    public HashMap<String, Integer> authorsWithMostBooks() {
-        Set<AuthorBookCount> sortedAuthors = new TreeSet<>();
+    public HashMap<String, Integer> authorsWithMostBooks(){
+        HashMap<String,Integer> countBooksByAuthor = new HashMap<>();
         List<String> authors = bibliotheque.values().stream().map(Book::getAuthor).toList();
-        for (String author : authors) {
+        for (String author : authors){
             List<Book> books = filterByAuthor(author);
-            sortedAuthors.add(new AuthorBookCount(author, books.size()));
+            countBooksByAuthor.put(author,books.size());
         }
 
-        HashMap<String, Integer> sortedAuthorsMap = new HashMap<>();
-        for (AuthorBookCount authorBookCount : sortedAuthors) {
-            sortedAuthorsMap.put(authorBookCount.author, authorBookCount.bookCount);
-        }
-        return sortedAuthorsMap;
+        return countBooksByAuthor;
     }
 
     public List<Book> filterAndSort(Comparator<Book> sorting, Predicate<Book> filtering){
